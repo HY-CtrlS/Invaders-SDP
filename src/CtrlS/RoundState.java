@@ -35,23 +35,37 @@ public class RoundState {
     }
 
     private int calculateCoin() {
+        int coin = 0;
+
+
+
 
         int baseCoin = roundScore / 10;
+        //레벨 보너스(levelBonus)
         int levelBonus = baseCoin * currState.getLevel();
-        int coin = baseCoin + levelBonus;
+        coin += levelBonus;
+
+        //정확도 보너스(accuracyBonus)
+        int accuracyBonus = 0;
 
         if (roundHitRate > 0.9) {
+            accuracyBonus += (int) (coin * 0.3);
             coin += (int) (coin * 0.3); // 30% 보너스 지급
             Core.getLogger().info("hitRate bonus occurs (30%).");
         } else if (roundHitRate > 0.8) {
+            accuracyBonus += (int) (coin * 0.3);
             coin += (int) (coin * 0.2); // 20% 보너스 지급
             Core.getLogger().info("hitRate bonus occurs (20%).");
+        } else if (roundHitRate > 0.7) {
+            accuracyBonus += (int) (coin * 0.3);
+            coin += (int) (coin * 0.1); // 10% 보너스 지급
+            Core.getLogger().info("hitRate bonus occurs (10%).");
         }
 
         // Round clear time in seconds
         // DEBUGGING NEEDED(playTime)
         long timeDifferenceInSeconds = (currState.getTime() - prevState.getTime()) / 1000;
-
+        //시간 보너스(timeBonus)
         int timeBonus = 0;
 
         /*
